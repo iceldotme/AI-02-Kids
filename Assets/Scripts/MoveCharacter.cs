@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class MoveCharacter : MonoBehaviour
 {
-    [SerializeField] Transform moveGoal;
-    [SerializeField] float speed = 0.1f;
-    [SerializeField] float distance = 1.5f;
+    public Transform moveGoal;
+    public float speed = 0.1f;
+    public float rotationSpeed = 0.03f;
+    public float distance = 1.5f;
 
     // Start is called before the first frame update
     void Start() {
@@ -19,6 +20,10 @@ public class MoveCharacter : MonoBehaviour
 
         Vector3 realGoal = new Vector3(moveGoal.position.x, transform.position.y, moveGoal.position.z);
         Vector3 direction = realGoal - transform.position;
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed);
+
+        //Debug.DrawRay(transform.position, direction, Color.green);
 
         if (direction.magnitude >= distance) {
             Vector3 pushVector = direction.normalized * speed;
